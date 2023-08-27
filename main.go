@@ -5,13 +5,14 @@ import (
 )
 
 
-func coinChange(cash *int, price *int) *map[int]int{
+func coinChange(cash int, price int) map[int]int{
      coins := map[int]int{}
      coinType := []int{1,2,5,10,20,50,100,500,1000}
-     remains := *cash - *price
-    if(*cash < *price){
+     remains := cash - price
+
+    if(cash < price){
        fmt.Printf("Cash is not enough to pay.")
-       return &coins
+       return coins
     }
 
     for remains > 0 {
@@ -27,10 +28,16 @@ func coinChange(cash *int, price *int) *map[int]int{
     }
 
 
-    return &coins
+    return coins
 }
 
+func getExchange(coins interface{}) {
+      fmt.Printf("getExchange %v ", coins)
+}
+
+
 func main() {
+
     var cash int;
     var price int;
 
@@ -39,7 +46,12 @@ func main() {
     fmt.Printf("Enter Total Price: ")
     fmt.Scanf("%d",&price)
 
-    coins := coinChange(&cash, &price)
-    fmt.Printf("Change %v ", coins)
+    coins := coinChange(cash, price)
+
+    cashier := Observable{}
+    counterMachine := Observable{}
+    counterMachine.subscribe(getExchange)
+
+    cashier.next(coins)
  
 }
